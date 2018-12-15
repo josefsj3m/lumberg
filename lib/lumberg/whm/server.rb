@@ -54,6 +54,7 @@ module Lumberg
       #  * <tt>:user</tt> - PENDING
       #  * <tt>:ssl</tt> - PENDING
       #  * <tt>:basic_auth</tt>
+      #  * <tt>:port</tt>
       def initialize(options)
         @ssl_verify ||= false
         @ssl        = options.delete(:ssl)
@@ -65,6 +66,7 @@ module Lumberg
         @basic_auth = options.delete(:basic_auth)
         @timeout    = options.delete(:timeout)
         @whostmgr   = options.delete(:whostmgr)
+        @port       = options.delete(:port)
 
         @base_url = format_url(options)
       end
@@ -291,7 +293,7 @@ module Lumberg
 
       def format_url(options = {})
         @ssl = true if @ssl.nil?
-        port  = (@ssl ? 2087 : 2086)
+        port  = @port || (@ssl ? 2087 : 2086)
         proto = (@ssl ? 'https' : 'http')
 
         api = @whostmgr ? "scripts2" : "json-api"
