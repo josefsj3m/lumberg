@@ -28,5 +28,8 @@ module Lumberg
     require "lumberg/cpanel/domain_keys"
     require "lumberg/cpanel/ftp"
     require "lumberg/cpanel/mysql_db"
+    # cPanel UAPI libs
+    require "lumberg/cpanel/uapi/uapi_base"
+    require "lumberg/cpanel/uapi/email"
   end
 end

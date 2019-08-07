@@ -45,6 +45,9 @@ module Lumberg
       # Whostmgr
       attr_accessor :whostmgr
 
+      # To use cpanel uapi api
+      attr_accessor :uapi
+
       #
       # ==== Required
       #  * <tt>:host</tt> - PENDING
@@ -67,6 +70,7 @@ module Lumberg
         @timeout    = options.delete(:timeout)
         @whostmgr   = options.delete(:whostmgr)
         @port       = options.delete(:port)
+        @uapi       = options.delete(:uapi)
 
         @base_url = format_url(options)
       end
@@ -76,7 +80,7 @@ module Lumberg
         @response_key = options.delete(:response_key) || 'result'
 
         @whostmgr = options.delete(:whostmgr)
-        @base_url = format_url(options) if @whostmgr
+        @base_url = format_url(options) if @whostmgr || @uapi
         @function = function
         @params   = format_query(options)
 
@@ -296,7 +300,11 @@ module Lumberg
         port  = @port || (@ssl ? 2087 : 2086)
         proto = (@ssl ? 'https' : 'http')
 
-        api = @whostmgr ? "scripts2" : "json-api"
+        api = if @uapi
+                "execute/#{options.delete(:api_module)}"
+              else
+                @whostmgr ? "scripts2" : "json-api"
+              end
 
         "#{proto}://#{@host}:#{port}/#{api}/"
       end
